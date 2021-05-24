@@ -131,4 +131,28 @@ public class AudioController : MonoBehaviour
         yield break;
     }
 
+    public void Instantiate(Transform parent = null, float vol = 1)
+    {
+        SetVolumeScale(vol);
+        GameObject temp = new GameObject("Audio Instance");
+        temp.transform.position = this.transform.position;
+        if (parent)
+            temp.transform.SetParent(parent);
+        AudioSource tempAs = temp.AddComponent<AudioSource>();
+
+        currentVolume = Random.Range(minVolume, maxVolume);
+        currentMaxVolume = currentVolume;
+        tempAs.volume = currentVolume * scaleVolume;
+
+        if (audios.Length == 1)
+            tempAs.clip = audios[0];
+        else if (audios.Length > 1)
+            tempAs.clip = audios[Random.Range(0, audios.Length - 1)];
+
+        tempAs.outputAudioMixerGroup = audioSource.outputAudioMixerGroup;
+        tempAs.spatialBlend = audioSource.spatialBlend;
+        tempAs.pitch = Random.Range(minPitch, maxPitch);
+        tempAs.Play();
+        Destroy(temp, tempAs.clip.length + 0.1f);
+    }
 }

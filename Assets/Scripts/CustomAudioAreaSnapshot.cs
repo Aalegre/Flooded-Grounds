@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
+[System.Serializable]
+public class MixerValueBlend
+{
+    public AudioMixer mixer;
+    public string name;
+    public AnimationCurve values = AnimationCurve.Linear(0, 0, 1, 1);
+    public void Update(float T)
+    {
+        mixer.SetFloat(name, values.Evaluate(T));
+    }
+}
 public class CustomAudioAreaSnapshot : MonoBehaviour
 {
     public CustomVolumeGroup volume;
-    public AudioMixerSnapshot inside;
-    public AudioMixerSnapshot middle;
-    public AudioMixerSnapshot outside;
-    public float transitionTime = 0.25f;
+    public MixerValueBlend[] blends;
     // Start is called before the first frame update
     void Awake()
     {
@@ -20,17 +28,9 @@ public class CustomAudioAreaSnapshot : MonoBehaviour
     void Update()
     {
         volume.UpdateVolumes();
-        if(volume.blend >= 1)
+        foreach (MixerValueBlend blend in blends)
         {
-            inside.TransitionTo(transitionTime);
-        }
-        else if(volume.blend > 0)
-        {
-            middle.TransitionTo(transitionTime);
-        }
-        else
-        {
-            outside.TransitionTo(transitionTime);
+            blend.Update(volume.blend);
         }
     }
 

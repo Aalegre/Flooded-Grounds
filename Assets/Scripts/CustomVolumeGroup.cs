@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
+using System.Linq;
 #endif
 
 [System.Serializable] public class CustomVolumeGroup
@@ -58,13 +59,18 @@ using UnityEditor;
 #if UNITY_EDITOR
     public void DrawGizmos()
     {
-        for (int i = 0; i < volumes.Length; i++)
+        Camera tempcam = cam;
+        cam = Camera.current;
+        UpdateVolumes();
+        cam = tempcam;
+        CustomVolume[] tempVolumes = volumes.OrderBy(t => t.sqrDistance).ToArray();
+        for (int i = tempVolumes.Length - 1; i >= 0; i--)
         {
             Gizmos.color = new Color(1, 1, 0, 1);
-            Gizmos.DrawWireSphere(volumes[i].position, volumes[i].radius);
+            Gizmos.DrawWireSphere(tempVolumes[i].position, tempVolumes[i].radius);
             Gizmos.color = new Color(1, 1, 0, .5f);
-            Gizmos.DrawSphere(volumes[i].position, volumes[i].radius);
-            Gizmos.DrawWireSphere(volumes[i].position, volumes[i].radius + blendDistance);
+            Gizmos.DrawSphere(tempVolumes[i].position, tempVolumes[i].radius);
+            Gizmos.DrawWireSphere(tempVolumes[i].position, tempVolumes[i].radius + blendDistance);
         }
     }
 #endif
