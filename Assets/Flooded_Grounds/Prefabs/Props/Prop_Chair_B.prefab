@@ -10,12 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 487332}
   - component: {fileID: 20511504}
-  m_Layer: 8
+  - component: {fileID: 3039463714054403643}
+  - component: {fileID: 1261660573649025121}
+  m_Layer: 0
   m_Name: Prop_Chair_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 16
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &487332
 Transform:
@@ -56,6 +58,36 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2308636}
   m_Enabled: 1
+--- !u!64 &3039463714054403643
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153074}
+  m_Material: {fileID: 13400000, guid: ca77fab071e4fe54a96e7ba076c336bb, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300002, guid: 74bd41a0048b70a4b95cc80f58fbd457, type: 3}
+--- !u!54 &1261660573649025121
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153074}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &164546
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,13 +99,12 @@ GameObject:
   - component: {fileID: 454332}
   - component: {fileID: 3374976}
   - component: {fileID: 2368390}
-  - component: {fileID: 6561358}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Chair_B_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 16
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &454332
 Transform:
@@ -136,19 +167,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6561358
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164546}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.857939, y: 1.7184892, z: 1.1873357}
-  m_Center: {x: 0.001056686, y: 0.85539174, z: -0.0016337633}
 --- !u!1 &172462
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,13 +178,12 @@ GameObject:
   - component: {fileID: 414122}
   - component: {fileID: 3325976}
   - component: {fileID: 2308636}
-  - component: {fileID: 6555648}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: lo_Prop_Chair_B_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 16
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &414122
 Transform:
@@ -229,16 +246,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6555648
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 172462}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.857939, y: 1.7011598, z: 1.1873357}
-  m_Center: {x: 0.001056686, y: 0.85144144, z: -0.0016337633}
