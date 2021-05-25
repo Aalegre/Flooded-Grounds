@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class effectGroup
+{
+	[Range(0f, 10f)]
+	public int priority = 0;
+	public List<AudioClip> audioClips;
+}
+
 public class AmbienceSoundManager : MonoBehaviour
 {
 	public AudioListener audioListener;
@@ -25,7 +33,8 @@ public class AmbienceSoundManager : MonoBehaviour
 	public AudioSource ambienEffectSource = null;
 
 	[Tooltip("Ambience clips to play in random time")]
-	public List<AudioClip> ambienceClips = null;
+	public List<effectGroup> effectGroups = null;
+	private List<effectGroup> finalEffectGroups = new List<effectGroup>();
 
 	[Tooltip("Minimum time value (in seconds).")]
 	[Min(0f)]
@@ -163,6 +172,18 @@ public class AmbienceSoundManager : MonoBehaviour
 	#region Ambience effects
 	public void PlayEffects()
     {
+
+		if(finalEffectGroups.Count < 1)
+        {
+			foreach(effectGroup group in effectGroups)
+            {
+				for (int i = 0; i < group.priority; i++)
+                {
+					finalEffectGroups.Add(group);
+                }
+            }
+        }
+
 		if(ambienEffectSource != null)
 			ambienceCoroutine = StartCoroutine(RandomPlay());
 	}
@@ -180,11 +201,12 @@ public class AmbienceSoundManager : MonoBehaviour
 	{
 		while (true)
 		{
-			//ambienEffectSource.transform.position = audioListener.transform.position + (audioListener.transform.right * Random.Range(0, randomDistance));
 			ambienEffectSource.panStereo = Random.Range(-randomPanning, randomPanning);
 			randomTime = Random.Range(minimumTime, maximumTime);
 
-			ambienEffectSource.clip = ambienceClips[Random.Range(0, ambienceClips.Count)];
+
+			effectGroup selectedGroup = finalEffectGroups[Random.Range(0, finalEffectGroups.Count)];
+			ambienEffectSource.clip = selectedGroup.audioClips[Random.Range(0, selectedGroup.audioClips.Count)];
 
 			ambienEffectSource.pitch = Random.Range(lowPitchRange, highPitchRange);
 			ambienEffectSource.volume = Random.Range(minimumVolume, maximumVolume);
