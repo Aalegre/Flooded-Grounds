@@ -227,7 +227,7 @@ Material:
     - _Reflect: 1
     - _ReflectionContrast: 1
     - _ReflectionSaturation: 1
-    - _ReflectionStrength: 0.5
+    - _ReflectionStrength: 0.1
     - _RefractionIntensity: 0.61
     - _RefractionSpeed: 1.61
     - _ReverseFlow: -5
