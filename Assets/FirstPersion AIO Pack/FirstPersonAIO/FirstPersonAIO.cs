@@ -58,9 +58,10 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
     using System.Net;
 #endif
 
@@ -241,6 +242,12 @@ public class FirstPersonAIO : MonoBehaviour {
     }
     public DynamicFootStep dynamicFootstep = new DynamicFootStep();
 
+    #endregion
+
+    #region Events
+    public UnityEvent Jump;
+    public UnityEvent Land;
+    public UnityEvent Footstep;
     #endregion
 
     #endregion
@@ -591,117 +598,195 @@ public class FirstPersonAIO : MonoBehaviour {
            
         }
         #endregion
-        
+
         #region Dynamic Footsteps
-        if(enableAudioSFX){    
-            if(fsmode == FSMode.Dynamic)
-            {   
+        if (enableAudioSFX)
+        {
+            if (fsmode == FSMode.Dynamic)
+            {
                 RaycastHit hit = new RaycastHit();
 
-                if(Physics.Raycast(transform.position, Vector3.down, out hit)){
-                     
-                    if(dynamicFootstep.materialMode == DynamicFootStep.matMode.physicMaterial){
+                if (Physics.Raycast(transform.position, Vector3.down, out hit))
+                {
+
+                    if (dynamicFootstep.materialMode == DynamicFootStep.matMode.physicMaterial)
+                    {
                         dynamicFootstep.currentClipSet = (dynamicFootstep.woodPhysMat.Any() && dynamicFootstep.woodPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.woodClipSet.Any()) ? // If standing on Wood
                         dynamicFootstep.woodClipSet : ((dynamicFootstep.grassPhysMat.Any() && dynamicFootstep.grassPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.grassClipSet.Any()) ? // If standing on Grass
                         dynamicFootstep.grassClipSet : ((dynamicFootstep.metalAndGlassPhysMat.Any() && dynamicFootstep.metalAndGlassPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.metalAndGlassClipSet.Any()) ? // If standing on Metal/Glass
                         dynamicFootstep.metalAndGlassClipSet : ((dynamicFootstep.rockAndConcretePhysMat.Any() && dynamicFootstep.rockAndConcretePhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.rockAndConcreteClipSet.Any()) ? // If standing on Rock/Concrete
                         dynamicFootstep.rockAndConcreteClipSet : ((dynamicFootstep.dirtAndGravelPhysMat.Any() && dynamicFootstep.dirtAndGravelPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.dirtAndGravelClipSet.Any()) ? // If standing on Dirt/Gravle
-                        dynamicFootstep.dirtAndGravelClipSet : ((dynamicFootstep.mudPhysMat.Any() && dynamicFootstep.mudPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.mudClipSet.Any())? // If standing on Mud
-                        dynamicFootstep.mudClipSet : ((dynamicFootstep.customPhysMat.Any() && dynamicFootstep.customPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.customClipSet.Any())? // If standing on the custom material 
+                        dynamicFootstep.dirtAndGravelClipSet : ((dynamicFootstep.mudPhysMat.Any() && dynamicFootstep.mudPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.mudClipSet.Any()) ? // If standing on Mud
+                        dynamicFootstep.mudClipSet : ((dynamicFootstep.customPhysMat.Any() && dynamicFootstep.customPhysMat.Contains(hit.collider.sharedMaterial) && dynamicFootstep.customClipSet.Any()) ? // If standing on the custom material 
                         dynamicFootstep.customClipSet : footStepSounds)))))); // If material is unknown, fall back
-                    }else if (hit.collider.GetComponent<MeshRenderer>()){
+                    }
+                    else if (hit.collider.GetComponent<MeshRenderer>())
+                    {
                         dynamicFootstep.currentClipSet = (dynamicFootstep.woodMat.Any() && dynamicFootstep.woodMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.woodClipSet.Any()) ? // If standing on Wood
                         dynamicFootstep.woodClipSet : ((dynamicFootstep.grassMat.Any() && dynamicFootstep.grassMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.grassClipSet.Any()) ? // If standing on Grass
                         dynamicFootstep.grassClipSet : ((dynamicFootstep.metalAndGlassMat.Any() && dynamicFootstep.metalAndGlassMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.metalAndGlassClipSet.Any()) ? // If standing on Metal/Glass
                         dynamicFootstep.metalAndGlassClipSet : ((dynamicFootstep.rockAndConcreteMat.Any() && dynamicFootstep.rockAndConcreteMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.rockAndConcreteClipSet.Any()) ? // If standing on Rock/Concrete
                         dynamicFootstep.rockAndConcreteClipSet : ((dynamicFootstep.dirtAndGravelMat.Any() && dynamicFootstep.dirtAndGravelMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.dirtAndGravelClipSet.Any()) ? // If standing on Dirt/Gravle
-                        dynamicFootstep.dirtAndGravelClipSet : ((dynamicFootstep.mudMat.Any() && dynamicFootstep.mudMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.mudClipSet.Any())? // If standing on Mud
-                        dynamicFootstep.mudClipSet : ((dynamicFootstep.customMat.Any() && dynamicFootstep.customMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.customClipSet.Any())? // If standing on the custom material 
+                        dynamicFootstep.dirtAndGravelClipSet : ((dynamicFootstep.mudMat.Any() && dynamicFootstep.mudMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.mudClipSet.Any()) ? // If standing on Mud
+                        dynamicFootstep.mudClipSet : ((dynamicFootstep.customMat.Any() && dynamicFootstep.customMat.Contains(hit.collider.GetComponent<MeshRenderer>().sharedMaterial) && dynamicFootstep.customClipSet.Any()) ? // If standing on the custom material 
                         dynamicFootstep.customClipSet : footStepSounds.Any() ? footStepSounds : null)))))); // If material is unknown, fall back
                     }
 
-                    if(IsGrounded)
+                    if (IsGrounded)
                     {
-                        if(!previousGrounded)
+                        if (!previousGrounded)
                         {
-                            if(dynamicFootstep.currentClipSet.Any()) { audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)],Volume/10); }
+                            if (dynamicFootstep.currentClipSet.Any())
+                            {
+                                audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)], Volume / 10);
+                                Land.Invoke();
+                            }
                             nextStepTime = headbobCycle + 0.5f;
-                        } else
+                        }
+                        else
                         {
-                            if(headbobCycle > nextStepTime)
+                            if (headbobCycle > nextStepTime)
                             {
                                 nextStepTime = headbobCycle + 0.5f;
-                                if(dynamicFootstep.currentClipSet.Any()){ audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)],Volume/10); }
+                                if (dynamicFootstep.currentClipSet.Any())
+                                {
+                                    audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)], Volume / 10);
+                                    Footstep.Invoke();
+                                }
                             }
                         }
                         previousGrounded = true;
-                    } else
+                    }
+                    else
                     {
-                        if(previousGrounded)
+                        if (previousGrounded)
                         {
-                            if(dynamicFootstep.currentClipSet.Any()){ audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)],Volume/10); }
+                            if (dynamicFootstep.currentClipSet.Any())
+                            {
+                                audioSource.PlayOneShot(dynamicFootstep.currentClipSet[Random.Range(0, dynamicFootstep.currentClipSet.Count)], Volume / 10);
+                                Jump.Invoke();
+                            }
                         }
                         previousGrounded = false;
                     }
 
-                } else {
+                }
+                else
+                {
                     dynamicFootstep.currentClipSet = footStepSounds;
-                    if(IsGrounded)
+                    if (IsGrounded)
                     {
-                        if(!previousGrounded)
+                        if (!previousGrounded)
                         {
-                            if(landSound){ audioSource.PlayOneShot(landSound,Volume/10); }
+                            if (landSound)
+                            {
+                                audioSource.PlayOneShot(landSound, Volume / 10);
+                                Land.Invoke();
+                            }
                             nextStepTime = headbobCycle + 0.5f;
-                        } else
+                        }
+                        else
                         {
-                            if(headbobCycle > nextStepTime)
+                            if (headbobCycle > nextStepTime)
                             {
                                 nextStepTime = headbobCycle + 0.5f;
                                 int n = Random.Range(0, footStepSounds.Count);
-                                if(footStepSounds.Any()){ audioSource.PlayOneShot(footStepSounds[n],Volume/10); }
+                                if (footStepSounds.Any())
+                                {
+                                    audioSource.PlayOneShot(footStepSounds[n], Volume / 10);
+                                    Footstep.Invoke();
+                                }
                                 footStepSounds[n] = footStepSounds[0];
                             }
                         }
                         previousGrounded = true;
-                    } else
+                    }
+                    else
                     {
-                        if(previousGrounded)
+                        if (previousGrounded)
                         {
-                            if(jumpSound){ audioSource.PlayOneShot(jumpSound,Volume/10); }
+                            if (jumpSound)
+                            {
+                                audioSource.PlayOneShot(jumpSound, Volume / 10);
+                                Jump.Invoke();
+                            }
                         }
                         previousGrounded = false;
                     }
                 }
-                
-            } else
+
+            }
+            else
             {
-                if(IsGrounded)
+                if (IsGrounded)
                 {
-                    if(!previousGrounded)
+                    if (!previousGrounded)
                     {
-                        if(landSound) { audioSource.PlayOneShot(landSound,Volume/10); }
+                        if (landSound)
+                        {
+                            audioSource.PlayOneShot(landSound, Volume / 10);
+                            Land.Invoke();
+                        }
                         nextStepTime = headbobCycle + 0.5f;
-                    } else
+                    }
+                    else
                     {
-                        if(headbobCycle > nextStepTime)
+                        if (headbobCycle > nextStepTime)
                         {
                             nextStepTime = headbobCycle + 0.5f;
                             int n = Random.Range(0, footStepSounds.Count);
-                            if(footStepSounds.Any() && footStepSounds[n] != null){ audioSource.PlayOneShot(footStepSounds[n],Volume/10);}
-                            
+                            if (footStepSounds.Any() && footStepSounds[n] != null)
+                            {
+                                audioSource.PlayOneShot(footStepSounds[n], Volume / 10);
+                                Footstep.Invoke();
+                            }
+
                         }
                     }
                     previousGrounded = true;
-                } else
+                }
+                else
                 {
-                    if(previousGrounded)
+                    if (previousGrounded)
                     {
-                        if(jumpSound) { audioSource.PlayOneShot(jumpSound,Volume/10); }
+                        if (jumpSound)
+                        {
+                            audioSource.PlayOneShot(jumpSound, Volume / 10);
+                            Jump.Invoke();
+                        }
                     }
                     previousGrounded = false;
                 }
             }
 
+        }
+        else
+        {
+            if (IsGrounded)
+            {
+                if (!previousGrounded)
+                {
+                    Land.Invoke();
+                    nextStepTime = headbobCycle + 0.5f;
+                }
+                else
+                {
+                    if (headbobCycle > nextStepTime)
+                    {
+                        nextStepTime = headbobCycle + 0.5f;
+                        Footstep.Invoke();
+                    }
+                }
+                previousGrounded = true;
+            }
+            else
+            {
+                if (previousGrounded)
+                {
+                    Jump.Invoke();
+                }
+                previousGrounded = false;
+            }
         }
         #endregion
 
@@ -1479,8 +1564,8 @@ public class FirstPersonAIO : MonoBehaviour {
                     DropAreaGUI(t.footStepSounds,GUILayoutUtility.GetLastRect());
                 } 
                 EditorGUILayout.EndFoldoutHeaderGroup();
-                #endregion
-            }
+            #endregion
+        }
         #endregion
 
         /*   
@@ -1495,7 +1580,7 @@ public class FirstPersonAIO : MonoBehaviour {
 
 
 
-            GUI.enabled = true;
+        GUI.enabled = true;
             EditorGUILayout.Space();
             EditorGUILayout.Space();
             EditorGUILayout.Space();

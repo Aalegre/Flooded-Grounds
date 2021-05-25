@@ -23,7 +23,9 @@ using System.Linq;
     public bool inside = false;
     public float distance = 0;
     [Range(0, 1)] public float blend = 0;
+    [Range(0, 1)] public float blendTimed = 0;
     public int nearestVolume;
+    public float speed = 1;
 
     public void Setup()
     {
@@ -54,6 +56,7 @@ using System.Linq;
             distance = 0;
             inside = false;
         }
+        blendTimed = Mathf.Lerp(blendTimed, blend, Time.deltaTime * speed);
     }
 
 #if UNITY_EDITOR

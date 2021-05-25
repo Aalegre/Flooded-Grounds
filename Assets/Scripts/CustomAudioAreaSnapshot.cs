@@ -30,7 +30,7 @@ public class CustomAudioAreaSnapshot : MonoBehaviour
         volume.UpdateVolumes();
         foreach (MixerValueBlend blend in blends)
         {
-            blend.Update(volume.blend);
+            blend.Update(volume.blendTimed);
         }
     }
 

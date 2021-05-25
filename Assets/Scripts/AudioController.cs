@@ -153,6 +153,9 @@ public class AudioController : MonoBehaviour
         tempAs.spatialBlend = audioSource.spatialBlend;
         tempAs.pitch = Random.Range(minPitch, maxPitch);
         tempAs.Play();
-        Destroy(temp, tempAs.clip.length + 0.1f);
+        if (tempAs.clip)
+            Destroy(temp, tempAs.clip.length + 0.1f);
+        else
+            Destroy(temp);
     }
 }
