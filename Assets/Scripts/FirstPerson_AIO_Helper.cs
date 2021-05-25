@@ -15,7 +15,7 @@ public class FirstPerson_AIO_Helper : MonoBehaviour
         public class AudioClipCustom
         {
             public AudioClip audio;
-            [Range(0, 1)] public float scale = 1;
+            [Range(0, 3)] public float scale = 1;
         }
         public PhysicMaterial[] mats;
         public AudioClipCustom[] audios;
