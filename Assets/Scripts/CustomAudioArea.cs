@@ -14,7 +14,7 @@ public class MixerValueBlend
         mixer.SetFloat(name, values.Evaluate(T));
     }
 }
-public class CustomAudioAreaSnapshot : MonoBehaviour
+public class CustomAudioArea : MonoBehaviour
 {
     public CustomVolumeGroup volume;
     public MixerValueBlend[] blends;
