@@ -1,11 +1,13 @@
 # [AA3] Unity in-engine audio demo 
-
+**Please read the Readme.md included in the GitHub repository before opening the project**
 ## Integrants
 * Alberto Alegre
 * Francesc Obrador
 * Salvio Calvillo
 
 ## Execution notes & warnings
+We are using unity **2019.4.26** *(Any unity version from 2019.4.10 to 2019.4.27 should work)*
+
 For this demo we used a pre-made scene and a first person controller from the asset store.
 
 The first person controller is a little janky, sometimes it gets stuck on ledges, for example when going upstairs. 
