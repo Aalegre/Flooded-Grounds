@@ -15,6 +15,7 @@ We decided not to modify it too much because of time constraints. We only deacti
 * **WASD**: movement
 * **Space**: jump
 * **Left click**: Toggle flashlight
+* **Right click**: Switch between reality realms
 * **Left shift**: Sprint
 
 ### Asset locations
@@ -31,7 +32,7 @@ This script allows us to create custom volumes that check if the camera is insid
 ##### CustomAudioArea.cs
 This script uses a CustomVolumeGroup to modify parameters of the mixer
 ##### FirstPerson_AIO_Helper.cs
-We use this script to read from the First person controller that we downloaded from the asset store. Checks the floor, plays the footstep sounds, and toggles the flashlight
+We use this script to read from the First person controller that we downloaded from the asset store. Checks the floor, plays the footstep sounds, and toggles the flashlight. From here we also change the visual effects and toggle the snapshots when you change the realm.
 #### Sounds
 All the sounds are in ```Assets/Sounds```
 We did not use all the sounds that we have in the project.
@@ -53,7 +54,7 @@ The scene hierarchy is:
 * **FPS display**: displays current fps when playing
 * **GUI**: Shows the move controls
 * **EventSystem**: Canvas event system
-* **FirstPerson-AIO**: First person controller, this has the camera, flashlight, footsteps, rain effect...
+* **FirstPerson-AIO**: First person controller, this has the camera, flashlight, footsteps, particles, realm switcher...
 
 ## Features
 ### 2D Ambience sound
@@ -101,10 +102,16 @@ The different clocks that tick inside the house
 We group all the sounds in these different mixer groups:
 * Master
  * Music
+   * Normal
+   * Hell
+   * Limbo
  * SFX
-   * Outside
+   * Normal
+     * Outside
+   * Limbo
+   * Hell
    * Footsteps
    * Other
 
 ### Snapshots
-We did not find any use for snapshots in this scenario.
+We used 3 different snapshots that modify multiple pareameters: Normal, Limbo and Hell.

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
 
 [RequireComponent(typeof(FirstPersonAIO))]
 [DisallowMultipleComponent]
@@ -22,6 +24,20 @@ public class FirstPerson_AIO_Helper : MonoBehaviour
         [Range(0, 1)]
         public float AudioScale = 1;
     }
+    public enum WORLDMODE { NORMAL, LIMBO, HELL, COUNT}
+    public WORLDMODE worldmode = WORLDMODE.NORMAL;
+    WORLDMODE worldmodeLast = WORLDMODE.NORMAL;
+    public AudioMixerSnapshot Normal;
+    public ParticleSystem NormalParticles;
+    ParticleSystem.EmissionModule NormalParticlesEmission;
+    public AudioMixerSnapshot Limbo;
+    public PostProcessVolume LimboVolume;
+    public ParticleSystem LimboParticles;
+    ParticleSystem.EmissionModule LimboParticlesEmission;
+    public AudioMixerSnapshot Hell;
+    public PostProcessVolume HellVolume;
+    public ParticleSystem HellParticles;
+    ParticleSystem.EmissionModule HellParticlesEmission;
     public FirstPersonAIO fp;
     public AudioController ac;
     public UnityEvent Footstep;
@@ -51,6 +67,12 @@ public class FirstPerson_AIO_Helper : MonoBehaviour
         fp.Land = Land;
         fp.Land.AddListener(delegate { this.LandSound(); });
         spotlight.enabled = false;
+        if (NormalParticles)
+            NormalParticlesEmission = NormalParticles.emission;
+        if (LimboParticles)
+            LimboParticlesEmission = LimboParticles.emission;
+        if (HellParticles)
+            HellParticlesEmission = HellParticles.emission;
     }
     private void FixedUpdate()
     {
@@ -72,6 +94,52 @@ public class FirstPerson_AIO_Helper : MonoBehaviour
             ac.audios = new AudioClip[] { lightToggle.audio };
             ac.Instantiate(transform, lightToggle.scale);
         }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            worldmode = (WORLDMODE)((((int)worldmode) + 1) % (int)WORLDMODE.COUNT);
+        }
+        if(worldmode != worldmodeLast)
+        {
+            switch (worldmode)
+            {
+                case WORLDMODE.NORMAL:
+                    Normal.TransitionTo(1);
+                    break;
+                case WORLDMODE.LIMBO:
+                    Limbo.TransitionTo(1);
+                    break;
+                case WORLDMODE.HELL:
+                    Hell.TransitionTo(1);
+                    break;
+            }
+            worldmodeLast = worldmode;
+        }
+        switch (worldmode)
+        {
+            case WORLDMODE.NORMAL:
+                NormalParticlesEmission.enabled = true;
+                LimboParticlesEmission.enabled = false;
+                HellParticlesEmission.enabled = false;
+                LimboVolume.weight -= Time.deltaTime;
+                HellVolume.weight -= Time.deltaTime;
+                break;
+            case WORLDMODE.LIMBO:
+                NormalParticlesEmission.enabled = false;
+                LimboParticlesEmission.enabled = true;
+                HellParticlesEmission.enabled = false;
+                LimboVolume.weight += Time.deltaTime;
+                HellVolume.weight -= Time.deltaTime;
+                break;
+            case WORLDMODE.HELL:
+                NormalParticlesEmission.enabled = false;
+                LimboParticlesEmission.enabled = false;
+                HellParticlesEmission.enabled = true;
+                LimboVolume.weight -= Time.deltaTime;
+                HellVolume.weight += Time.deltaTime;
+                break;
+        }
+        LimboVolume.weight = Mathf.Clamp01(LimboVolume.weight);
+        HellVolume.weight = Mathf.Clamp01(HellVolume.weight);
     }
     public void JumpSound()
     {
